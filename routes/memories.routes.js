@@ -1,4 +1,11 @@
 import { Router } from "express";
+import {
+  createMemory,
+  fetchAllMemories,
+  findMemoriesByTag,
+  updateMemory,
+  deleteMemory,
+} from "../controllers/memories.controllers.js";
 export const router = Router();
 
 router.post("/", createMemory);
