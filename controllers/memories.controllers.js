@@ -1,5 +1,18 @@
 import { Memory } from "../models/memories.models.js";
-export const createMemory = (req, res) => {};
+export const createMemory = async (req, res) => {
+  try {
+    await Memory.create({
+      title: req.body.title,
+      type: req.body.type,
+      content: req.body.content,
+      tags: req.body.tags,
+      date: req.body.date,
+    });
+    res.status(200).json({ message: "memory created successfully" });
+  } catch {
+    res.status(500).json({ message: "failed to create memeory" });
+  }
+};
 
 export const fetchAllMemories = async (req, res) => {
   try {
@@ -10,8 +23,31 @@ export const fetchAllMemories = async (req, res) => {
   }
 };
 
-export const findMemoriesByTag = (req, res) => {};
+export const findMemoriesByTag = async (req, res) => {
+  try {
+    const memoriesByTag = await Memory.find({ tags: req.body.tag });
+    res.status(200).json({ memoriesByTag: memoriesByTag });
+  } catch {
+    res.status(500).json({ message: "server error" });
+  }
+};
 
-export const updateMemory = (req, res) => {};
+export const updateMemory = async (req, res) => {
+  try {
+    const memory = await Memory.findById(req.params.id);
+    memory.title = req.body.title;
+    await memory.save();
+    res.status(200).json({ message: "memory title updated" });
+  } catch {
+    res.status(500).json({ message: "memeory title could not be updated" });
+  }
+};
 
-export const deleteMemory = (req, res) => {};
+export const deleteMemory = async (req, res) => {
+  try {
+    const deletedUser = await Memory.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "user deleted", deletedUser: deletedUser });
+  } catch {
+    res.status(500).json({ message: "user could not be deleted" });
+  }
+};
