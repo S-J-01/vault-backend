@@ -10,7 +10,7 @@ export const createMemory = async (req, res) => {
     });
     res.status(200).json({ message: "memory created successfully" });
   } catch {
-    res.status(500).json({ message: "failed to create memeory" });
+    res.status(500).json({ message: "failed to create memory" });
   }
 };
 
@@ -39,15 +39,18 @@ export const updateMemory = async (req, res) => {
     await memory.save();
     res.status(200).json({ message: "memory title updated" });
   } catch {
-    res.status(500).json({ message: "memeory title could not be updated" });
+    res.status(500).json({ message: "memory title could not be updated" });
   }
 };
 
 export const deleteMemory = async (req, res) => {
   try {
-    const deletedUser = await Memory.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: "user deleted", deletedUser: deletedUser });
+    const deletedMemory = await Memory.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+      message: "memory deleted",
+      deletedMemory,
+    });
   } catch {
-    res.status(500).json({ message: "user could not be deleted" });
+    res.status(500).json({ message: "memory could not be deleted" });
   }
 };
