@@ -23,6 +23,18 @@ export const fetchAllMemories = async (req, res) => {
   }
 };
 
+export const getMemoryById = async (req, res) => {
+  try {
+    const memory = await Memory.findById(req.params.id);
+    if (!memory) {
+      return res.status(404).json({ message: "memory not found" });
+    }
+    res.status(200).json({ memory });
+  } catch {
+    res.status(500).json({ message: "failed to get memory" });
+  }
+};
+
 export const findMemoriesByTag = async (req, res) => {
   try {
     const memoriesByTag = await Memory.find({ tags: req.body.tag });
