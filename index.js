@@ -8,11 +8,14 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/v1", apiRouter);
+
+const port = Number(process.env.PORT) || 3000;
+
 const start = async () => {
   await mongoose.connect(process.env.MONGODB_URI);
   console.log("mongoose connected to mongodb");
-  app.listen(3000, () => {
-    console.log("server started on port 3000");
+  app.listen(port, () => {
+    console.log(`server started on port ${port}`);
   });
 };
 
