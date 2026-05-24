@@ -7,6 +7,10 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ ok: true });
+});
+
 app.use("/api/v1", apiRouter);
 
 const port = Number(process.env.PORT) || 3000;
