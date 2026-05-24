@@ -3,6 +3,7 @@ import {
   createMemory,
   fetchAllMemories,
   getMemoryById,
+  fetchAllTags,
   findMemoriesByTag,
   updateMemory,
   deleteMemory,
@@ -11,6 +12,7 @@ export const router = Router();
 
 router.post("/", createMemory);
 router.get("/", fetchAllMemories);
+router.get("/tags", fetchAllTags);
 router.get("/search", findMemoriesByTag);
 router.get("/:id", getMemoryById);
 router.put("/:id", updateMemory);

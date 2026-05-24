@@ -35,6 +35,15 @@ export const getMemoryById = async (req, res) => {
   }
 };
 
+export const fetchAllTags = async (req, res) => {
+  try {
+    const tags = await Memory.distinct("tags");
+    res.status(200).json({ tags });
+  } catch {
+    res.status(500).json({ message: "failed to get tags" });
+  }
+};
+
 export const findMemoriesByTag = async (req, res) => {
   try {
     const memoriesByTag = await Memory.find({ tags: req.body.tag });
