@@ -8,7 +8,10 @@ import {
   updateMemory,
   deleteMemory,
 } from "../controllers/memories.controllers.js";
+import { requireAuth } from "../middleware/auth.js";
 export const router = Router();
+
+router.use(requireAuth);
 
 router.post("/", createMemory);
 router.get("/", fetchAllMemories);
