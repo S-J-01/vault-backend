@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 
 import { router as apiRouter } from "./routes/index.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 dotenv.config();
@@ -14,6 +15,12 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/v1", apiRouter);
+
+app.use((req, res) => {
+  res.status(404).json({ message: "not found" });
+});
+
+app.use(errorHandler);
 
 const port = Number(process.env.PORT) || 3000;
 
