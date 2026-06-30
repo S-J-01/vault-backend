@@ -1,12 +1,14 @@
-export const login = (req, res) => {
+import { HttpError } from "../middleware/errorHandler.js";
+
+export const login = async (req, res) => {
   const { password, rememberMe } = req.body;
 
   if (!password) {
-    return res.status(400).json({ message: "password required" });
+    throw new HttpError(400, "password required");
   }
 
   if (password !== process.env.AUTH_PASSWORD) {
-    return res.status(401).json({ message: "invalid password" });
+    throw new HttpError(401, "invalid password");
   }
 
   const maxAge = rememberMe
@@ -22,12 +24,12 @@ export const login = (req, res) => {
   res.status(200).json({ message: "logged in" });
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
   res.clearCookie("vault_session", { signed: true });
   res.status(200).json({ message: "logged out" });
 };
 
-export const me = (req, res) => {
+export const me = async (req, res) => {
   if (req.signedCookies.vault_session === "authenticated") {
     return res.status(200).json({ authenticated: true });
   }
