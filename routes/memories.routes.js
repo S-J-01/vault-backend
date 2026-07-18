@@ -10,10 +10,12 @@ import {
 } from "../controllers/memories.controllers.js";
 import { requireAuth } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
+import { memoriesRateLimit } from "../middleware/memoriesRateLimit.js";
 
 export const router = Router();
 
 router.use(requireAuth);
+router.use(memoriesRateLimit);
 
 router.post("/", asyncHandler(createMemory));
 router.get("/", asyncHandler(fetchAllMemories));
