@@ -11,12 +11,20 @@ import {
 import { requireAuth } from "../middleware/auth.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import { memoriesRateLimit } from "../middleware/memoriesRateLimit.js";
+import {
+  createMemoryExport,
+  getMemoryExport,
+  downloadMemoryExport,
+} from "../controllers/memoryExports.controllers.js";
 
 export const router = Router();
 
 router.use(requireAuth);
 router.use(memoriesRateLimit);
 
+router.post("/exports", asyncHandler(createMemoryExport));
+router.get("/exports/:jobId/download", asyncHandler(downloadMemoryExport));
+router.get("/exports/:jobId", asyncHandler(getMemoryExport));
 router.post("/", asyncHandler(createMemory));
 router.get("/", asyncHandler(fetchAllMemories));
 router.get("/tags", asyncHandler(fetchAllTags));
