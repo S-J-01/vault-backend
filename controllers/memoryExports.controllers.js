@@ -6,7 +6,9 @@ import { HttpError } from "../middleware/errorHandler.js";
 const exportDirectory = resolve("exports");
 
 export const createMemoryExport = async (req, res) => {
-  const job = await memoryExportQueue.add("create", {});
+  const job = await memoryExportQueue.add("create", {
+    ownerId: req.user.id,
+  });
   res.status(202).json({
     jobId: job.id,
     statusUrl: `/api/v1/memories/exports/${job.id}`,
@@ -15,7 +17,7 @@ export const createMemoryExport = async (req, res) => {
 
 export const getMemoryExport = async (req, res) => {
   const job = await memoryExportQueue.getJob(req.params.jobId);
-  if (!job) {
+  if (!job || job.data.ownerId !== req.user.id) {
     throw new HttpError(404, "export job not found");
   }
 
@@ -32,7 +34,7 @@ export const getMemoryExport = async (req, res) => {
 
 export const downloadMemoryExport = async (req, res) => {
   const job = await memoryExportQueue.getJob(req.params.jobId);
-  if (!job) {
+  if (!job || job.data.ownerId !== req.user.id) {
     throw new HttpError(404, "export job not found");
   }
   if ((await job.getState()) !== "completed" || !job.returnvalue?.fileName) {

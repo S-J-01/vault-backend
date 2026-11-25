@@ -15,7 +15,7 @@ export const login = async (req, res) => {
     ? 30 * 24 * 60 * 60 * 1000
     : 24 * 60 * 60 * 1000;
 
-  res.cookie("vault_session", "authenticated", {
+  res.cookie("vault_session", process.env.AUTH_USER_ID || "default", {
     httpOnly: true,
     signed: true,
     maxAge,
@@ -30,7 +30,7 @@ export const logout = async (req, res) => {
 };
 
 export const me = async (req, res) => {
-  if (req.signedCookies.vault_session === "authenticated") {
+  if (req.signedCookies.vault_session) {
     return res.status(200).json({ authenticated: true });
   }
   res.status(401).json({ authenticated: false });

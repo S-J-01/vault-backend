@@ -4,6 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "migrate:memory-owners": "node scripts/migrateMemoryOwners.js",
     "worker": "node workers/memoryExport.worker.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -17,7 +17,10 @@ const start = async () => {
   const worker = new Worker(
     "memory-exports",
     async (job) => {
-      const memories = await Memory.find({}).lean();
+      if (!job.data.ownerId) {
+        throw new Error("export job is missing an owner");
+      }
+      const memories = await Memory.find({ ownerId: job.data.ownerId }).lean();
       const fileName = `memories-${job.id}.json`;
       await writeFile(
         resolve(exportDirectory, fileName),
