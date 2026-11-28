@@ -3,6 +3,8 @@ import { Queue } from "bullmq";
 
 const redisUrl = new URL(process.env.REDIS_URL || "redis://127.0.0.1:6379");
 
+export const memoryExportRetentionMs = 24 * 60 * 60 * 1000;
+
 export const memoryExportQueue = new Queue("memory-exports", {
   connection: {
     host: redisUrl.hostname,
@@ -17,7 +19,10 @@ export const memoryExportQueue = new Queue("memory-exports", {
       type: "exponential",
       delay: 1000,
     },
-    removeOnComplete: { age: 86400, count: 1000 },
+    removeOnComplete: {
+      age: Math.ceil(memoryExportRetentionMs / 1000),
+      count: 1000,
+    },
     removeOnFail: { age: 604800, count: 1000 },
   },
 });
