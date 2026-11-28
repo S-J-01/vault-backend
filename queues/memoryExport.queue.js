@@ -12,6 +12,11 @@ export const memoryExportQueue = new Queue("memory-exports", {
     ...(redisUrl.protocol === "rediss:" ? { tls: {} } : {}),
   },
   defaultJobOptions: {
+    attempts: 3,
+    backoff: {
+      type: "exponential",
+      delay: 1000,
+    },
     removeOnComplete: { age: 86400, count: 1000 },
     removeOnFail: { age: 604800, count: 1000 },
   },
